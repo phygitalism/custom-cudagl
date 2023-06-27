@@ -14,7 +14,7 @@ jobs:
         matrix:
             cuda_major_version: ['11']
             cuda_minor_version: ['7', '8']
-            cuda_patch_version: ['1']
+            cuda_patch_version: ['0']
 
 
     steps:
@@ -23,9 +23,12 @@ jobs:
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: ${{ secrets.DOCKERHUB_USER }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
   
     - name: Build the Docker image
-      run: ./build.sh -d --image-name ${{ secrets.DOCKERHUB_ORG }}/cudagl --cuda-version ${{ matrix.cuda_major_version }}.${{ matrix.cuda_minor_version}}.${{ matrix.cuda_patch_version }} --os ubuntu --os-version 20.04 --arch x86_64 --cudagl
+      env:
+          PUSH_COMMAND: ${{ github.ref =='refs/heads/main' && '--push' || '' }}
+      run: |
+        bash ./build.sh -d --image-name ${{ secrets.DOCKERHUB_ORG }}/cudagl --cuda-version ${{ matrix.cuda_major_version }}.${{ matrix.cuda_minor_version}}.${{ matrix.cuda_patch_version }} --os ubuntu --os-version 20.04 --arch x86_64 --cudagl ${PUSH_COMMAND}
 
