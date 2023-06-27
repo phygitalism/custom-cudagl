@@ -4,6 +4,7 @@ set -euo pipefail
 
 #
 # This script requires buildkit: https://docs.docker.com/buildx/working-with-buildx/
+# https://gitlab.com/nvidia/container-images/cudagl
 #
 CUDA_IMAGE="nvcr.io/nvidia/cuda"
 LIBGLVND_VERSION="v1.2.0"
