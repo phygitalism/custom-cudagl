@@ -287,6 +287,11 @@ main() {
                      --build-arg "from=${CGL_INTER_IMAGE_NAME}:${CUDA_VERSION}-base-runtime-${OS}${OS_VERSION}" \
                      "opengl/glvnd/devel"
 
+        if [ "$PUSH_ARG" != "" ]
+        then
+            run_cmd docker push "${IMAGE_NAME}:${CUDA_VERSION}-base-${OS}${OS_VERSION}"
+        fi 
+
 
         # cudagl runtime is cuda:x.y-runtime + opengl:x.y-glvnd-runtime
         run_cmd docker build  -t "${CGL_INTER_IMAGE_NAME}:${CUDA_VERSION}-runtime-base-${OS}${OS_VERSION}" \
@@ -296,6 +301,11 @@ main() {
                        --build-arg "from=${CGL_INTER_IMAGE_NAME}:${CUDA_VERSION}-runtime-base-${OS}${OS_VERSION}" \
                        --build-arg "LIBGLVND_VERSION=${LIBGLVND_VERSION}" \
                        "opengl/glvnd/runtime"
+
+        if [ "$PUSH_ARG" != "" ]
+        then
+            run_cmd docker push "${IMAGE_NAME}:${CUDA_VERSION}-runtime-${OS}${OS_VERSION}"
+        fi 
 
         # cudagl devel is cuda:x.y-devel + opengl:x.y-glvnd-devel
         run_cmd docker build  -t "${CGL_INTER_IMAGE_NAME}:${CUDA_VERSION}-devel-base-${OS}${OS_VERSION}" \
@@ -308,6 +318,11 @@ main() {
         run_cmd docker build  -t "${IMAGE_NAME}:${CUDA_VERSION}-devel-${OS}${OS_VERSION}" \
                        --build-arg "from=${CGL_INTER_IMAGE_NAME}:${CUDA_VERSION}-devel-runtime-${OS}${OS_VERSION}" \
                        "opengl/glvnd/devel"
+
+        if [ "$PUSH_ARG" != "" ]
+        then
+            run_cmd docker push "${IMAGE_NAME}:${CUDA_VERSION}-devel-${OS}${OS_VERSION}"
+        fi
     fi
 }
 
